@@ -9,18 +9,18 @@ class ReversePolishNotation
     compute(tokens)
     {
         this.result = tokens[0];
-        for(let i = 1 ; i < tokens.length; i++)
+        for(let i = 0 ; i < tokens.length; i++)
         {
             if(tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '/' || tokens[i] == '*')
             {
-                let op1 = parseInt(this.operands.pop());
-                let op2 = parseInt(this.result);
-                let answer = this.getResult(op1, op2, tokens[i]);
-                this.result = answer;
+                let op2 = this.operands.pop();
+                let op1 = this.operands.pop();
+                this.result = this.getResult(op1, op2, tokens[i]);
+                this.operands.push(this.result);
             }
             else
             {
-                this.operands.push(tokens[i]);
+                this.operands.push(parseInt(tokens[i]));
             }
         }
         return this.result;
@@ -45,7 +45,7 @@ class ReversePolishNotation
             }
             case '/': {
                 if(opr2 != 0)
-                    res = opr1 + opr2;
+                    res = parseInt(opr1 / opr2);
                 else
                     res = "Can't divide";
                 break;
@@ -59,3 +59,4 @@ let r = new ReversePolishNotation();
 console.log(r.compute(["1","2","+","3","*","4","-"]));
 
 console.log(r.compute(["2","1","+","3","*"]));
+console.log(r.compute(["4","13","5","/","+"]));
