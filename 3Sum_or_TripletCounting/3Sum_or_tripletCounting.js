@@ -1,6 +1,8 @@
 // Problem Statement
 // Count the number of triplets in an array such that the sum of the triplet is LESS than a given value.
 
+const { constrainedMemory } = require("process");
+
 // Solution
 // To solve this problem, we can use a two-pointer approach. Here’s a detailed solution:
 
@@ -54,3 +56,70 @@
 // Time Complexity: O(n^2) due to the nested loop and the two-pointer traversal.
 // Space Complexity: O(1) as no extra space is used apart from the input array.
 // This solution ensures that you efficiently count the triplets while maintaining readability and simplicity.
+
+function threeSum(nums)
+{
+    nums = nums.sort((a,b) =>a-b);
+    let result = [];
+    let count = 0;
+    for(let i = 0; i < nums.length; i++)
+    {
+        //if the current value to i is same as previous i, continue in that case
+        if(i > 0 && nums[i] == nums[i-1])
+            continue;
+        
+        let j = i+1;
+        let k = nums.length -1;
+        while(j < k)
+        {
+            let sum = nums[i] + nums[j] + nums[k];
+
+            if(sum > 0)
+                k--;
+            else if(sum < 0)
+                j++;
+            else if(sum == 0)
+            {
+                result.push([nums[i], nums[j], nums[k]]);
+                while(nums[j] == nums[j+1])j++;
+                while(nums[k] == nums[k-1])k--;
+                j++;
+                k--;
+            }
+        }
+    }
+    return result;
+}
+
+console.log(threeSum([-1, 0, 1, 2, -1, -4])); //Output: [[-1,-1,2],[-1,0,1]]
+console.log(threeSum([0,1,1]));//Output: []
+console.log(threeSum([0,0,0]));//Output: [0,0,0]
+
+// to count the TRIPLETS
+function getTriplets(nums, target)
+{
+    let count = 0;
+    for(let  i = 0 ; i < nums.length; i++)
+    {
+        if(i > 0 && nums[i] == nums[i-1])
+            continue;
+
+        let j = i+1;
+        let k = nums.length -1;
+
+        while(j < k)
+        {
+            let sum = nums[i] + nums[j] + nums[k];
+            if(sum < target)
+            {
+                count += (k-j);
+                j++;
+            }
+            else
+                k--;
+        }
+    }
+    return count;
+}
+
+console.log(getTriplets([5, 1, 3, 4, 7], 12));// O/p = 4;
