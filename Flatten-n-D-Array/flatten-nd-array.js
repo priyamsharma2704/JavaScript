@@ -17,8 +17,8 @@ function flatten(arr)
         }
     }
 
-    result = result.reverse();
-    return result;
+    //result = result.reverse();
+    return result.reverse();
 }
 
 console.log(flatten([[1, 2, 3], [2, 4, 5], [1, 2, 3, 4]]));
