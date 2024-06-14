@@ -46,26 +46,26 @@ class Deck
 
     shuffleDeck()
     {
-        let shuffledDeck = [...this.deck];
-        for(let i = 0; i < shuffledDeck.length; i++)
+        for(let i = 0; i < this.deck.length; i++)
         {
             let idx1 = Math.floor(Math.random() * this.deck.length);
             let idx2 = Math.floor(Math.random() * this.deck.length);
 
-            [shuffledDeck[idx1], shuffledDeck[idx2]] = [shuffledDeck[idx2], shuffledDeck[idx1]];
+            [this.deck[idx1], this.deck[idx2]] = [this.deck[idx2], this.deck[idx1]];
         }
-        return shuffledDeck;
     }
 
-    deal(deck)
+    deal()
     {
-        return deck.pop();
+        return this.deck.pop();
     }
 }
 
 let d = new Deck();
 
 d.getDeck();
-let s_d = d.shuffleDeck();
-console.log(s_d);
-console.log(d.deal(s_d));
+d.shuffleDeck();
+console.log("------Shuffling the deck------");
+d.getDeck();
+console.log()
+console.log(d.deal());
