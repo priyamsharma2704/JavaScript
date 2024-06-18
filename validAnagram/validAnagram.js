@@ -2,7 +2,18 @@ res = validAnagram("anagram", "nagaram");
 console.log(res);
 res = validAnagram("rat", "cat");
 console.log(res);
-function validAnagram(s, t)
+
+function validAnagram(s,t)
+{
+    if(s.length !== t.length)
+        return false;
+
+    let sortedStr = (str) => str.split("").sort().join("");
+
+    return sortedStr(s) === sortedStr(t);
+}
+
+function validAnagramOld(s, t)
 {
     var s_map = new Map();
     var t_map = new Map();
