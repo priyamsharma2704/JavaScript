@@ -1,4 +1,4 @@
-##Sets
+## Sets
 
 ```
     var x = [1,2,3,4]
@@ -9,7 +9,7 @@
     Space Complexity for has()/add() is always O(1)
     .size() has O(1)
 
-##Maps
+## Maps
 
 ```
     var arr = [1,2,4,5]
@@ -24,7 +24,7 @@
     .has()/get()/set() has time complexity of O(1)
     map.size is O(1)
 
-##Arrays
+## Arrays
 
 ```
     var arr = [1,2,3,4,5]
@@ -36,7 +36,7 @@
     arr.length is O(1)
     arr.sort() is also O(n log n)
 
-##Strings
+## Strings
 
 ```
     var str = "abcdef"
