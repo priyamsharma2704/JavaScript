@@ -27,7 +27,7 @@ but for Maps, Sets, and Arrays we use for(var x of map.keys()/set/arr){} to get 
  */
 console.log(isAnagram2("racecar", "carrace"));
 console.log(isAnagram2("", ""));
-console.log(isAnagram2("racecar", "carrace1"));
+console.log(isAnagram2("JAR", "JAM"));
 function isAnagram2(s, t) {
     if (s.length != t.length) return false;
     var sMap = new Map();
