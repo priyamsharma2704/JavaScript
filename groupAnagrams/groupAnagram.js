@@ -4,7 +4,7 @@ s = "zxvsba";
 
 //console.log(s.split("").sort().join(""));
 
-res = groupAnagram(["eat","tea","tan","ate","nat","bat"]);
+res = groupAnagram(["eat", "tea", "tan", "ate", "nat", "bat"]);
 //console.log(res);
 
 res = groupAnagram([""]);
@@ -18,11 +18,11 @@ function groupAnagram(strs)
     var res = [];
     var sorted = [];
     var map = new Map();
-    for(var i = 0 ; i < strs.length; i++)
+    for (var i = 0; i < strs.length; i++)
     {
         curr = strs[i];
         curr = curr.split("").sort().join("");
-        if(map[curr] == null)
+        if (map[curr] == null)
         {
             map[curr] = [];
             map[curr].push(strs[i]);
@@ -34,7 +34,7 @@ function groupAnagram(strs)
         console.log(sorted[i]);
     }
 
-    for(var item in map)
+    for (var item in map)
     {
         res.push(map[item]);
     }
