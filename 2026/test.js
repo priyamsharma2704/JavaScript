@@ -1,18 +1,25 @@
-arr = [5, 4, 3, 2, 1]
+console.log(groupAnagram(["act", "pots", "tops", "cat", "stop", "hat"]));
 
-for (var num in arr)// 'in' gives indexes
-    console.log(num)
+function groupAnagram(strArr)
+{
+    var anagramMap = new Map();
 
-for (var num of arr)// 'of' gives the array elements
-    console.log(num)
+    for (var str of strArr)
+    {
+        var freq = new Array(26).fill(0);
 
-var map = new Map();
+        for (var char of str)
+            freq[char.charCodeAt(0) - 97] = 1;
 
-map.set('a', 1);
-map.set('b', 2)
-map.set([12, 2], 2)
+        freq = freq.join(',');
 
-console.log(map.entries())
-console.log(map.keys())
-console.log(map.values())
+        if (anagramMap.has(freq))
+        {
+            anagramMap.get(freq).push(str)
+        }
+        else
+            anagramMap.set(freq, [str]);
 
+        console.log(anagramMap)
+    }
+}
