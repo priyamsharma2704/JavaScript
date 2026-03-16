@@ -1,25 +1,10 @@
-console.log(groupAnagram(["act", "pots", "tops", "cat", "stop", "hat"]));
-
-function groupAnagram(strArr)
+isCapReached(userId)
 {
-    var anagramMap = new Map();
+    var value = redis.get(`user:${userId}:notif`)
+    if (value > CAP)
+        return true;
 
-    for (var str of strArr)
-    {
-        var freq = new Array(26).fill(0);
-
-        for (var char of str)
-            freq[char.charCodeAt(0) - 97] = 1;
-
-        freq = freq.join(',');
-
-        if (anagramMap.has(freq))
-        {
-            anagramMap.get(freq).push(str)
-        }
-        else
-            anagramMap.set(freq, [str]);
-
-        console.log(anagramMap)
-    }
+    redis.incr('user:' + userId + ':notif')
+    redis.expire('user:' + userId + ':notif', 86400)
+    return false;
 }
