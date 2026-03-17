@@ -1,5 +1,5 @@
 console.log(topKFrequent([1, 2, 2, 3, 3, 3], 2))
-//console.log(topKFrequent([7, 7], 1))
+console.log(topKFrequent([7, 7], 1))
 
 
 function topKFrequent(nums, k)
