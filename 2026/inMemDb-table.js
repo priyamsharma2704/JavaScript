@@ -1,76 +1,96 @@
 class inMemDb {
     constructor() {
-        this.table = new Map();
-        this.backupTable = new Map();
+        this.store = new Map();
+        this.backup = new Map();
+        this.ttl = 5000;
+    }
+    setTtl(time) {
+        this.ttl = time;
     }
 
-    //create table
-    createTable(tableName) {
-        if (this.table.get(tableName)) {
-            console.log("table already exists");
-            return;
+    tableExists(tableName) {
+        if (this.store.has(tableName)) {
+            return true;
         }
-        this.table.set(tableName, new Map());
     }
 
-    //insert table
+    createTable(tableName) {
+        if (!this.tableExists(tableName)) {
+            this.store.set(tableName, new Map());
+        }
+    }
+
     insert(tableName, id, data, ttl = null) {
-        if (!this.table.get(tableName)) {
+        if (!this.tableExists) {
             console.log("table does not exists");
-            return;
         }
 
         var expiry = ttl ? ttl + Date.now() : null;
-
-        this.table.get(tableName).set(id, { expiry, data });
+        this.store.get(tableName).set(id, { expiry, data });
     }
 
-    //update data
-    update(tableName, id, updatedData, ttl = null) {
-        if (!this.table.get(tableName)) {
+    update(tableName, id, updatedData) {
+        if (!this.tableExists) {
             console.log("table does not exists");
-            return;
         }
-        var oldData = this.table.get(tableName).get(id);
-        var data = {
-            expiry: oldData.expiry,
-            data: updatedData,
-        };
-        this.table.get(tableName).set(id, data);
+
+        var table = this.store.get(tableName);
+        var data = table.get(id);
+        if (this.isExpired(data)) {
+            table.delete(id);
+        } else {
+            var newdata = { expiry: data.expiry, data: updatedData };
+
+            table.set(id, newdata);
+        }
     }
 
     delete(tableName, id) {
-        if (!this.table.get(tableName)) {
+        if (!this.tableExists) {
             console.log("table does not exists");
-            return;
         }
 
-        this.table.get(tableName).delete(id);
+        this.store.get(tableName).delete(id);
     }
 
-    getAll(tableName) {
-        var tableData = this.table.entries(tableName);
+    getAll() {
         var result = new Map();
-        for (var [key, value] of tableData) {
-            if (!this.isExpired(value)) result.set(key, value);
+        for (var [tableName, tableData] of this.store) {
+            var table = new Map();
+            for (var [key, value] of tableData) {
+                if (this.isExpired(value)) {
+                    tableData.delete(key);
+                } else table.set(key, value);
+            }
+            result.set(tableName, table);
+        }
+        return result;
+    }
+
+    getTableData(tableName) {
+        var result = new Map();
+        var table = this.store.get(tableName);
+        for (var [key, value] of table) {
+            if (this.isExpired(value)) {
+                table.delete(key);
+            } else {
+                result.set(key, value);
+            }
         }
         return result;
     }
 
     snapshot() {
-        this.backupTable = new Map();
-        for (var [key, value] of this.table) {
-            this.backupTable.set(key, new Map(value));
-        }
+        for (var [key, value] of this.store)
+            this.backup.set(key, new Map(value));
     }
 
     restore() {
-        this.table = new Map(this.backupTable);
+        this.store = new Map(this.backup);
     }
 
-    //---helpers---//
     isExpired(data) {
-        return data.ttl !== null && data.ttl < Date.now();
+        return data.expiry !== null && data.expiry < Date.now();
     }
 }
 
@@ -80,7 +100,7 @@ db.insert("books", 1, "aaa", 3000);
 db.insert("books", 2, "bbb", 3000);
 db.insert("books", 3, "ccc", 3000);
 db.insert("books", 4, "ddd", 3000);
-
+console.log(db.getAll());
 db.update("books", 4, "dddddd");
 console.log(db.getAll());
 db.snapshot();
@@ -88,3 +108,7 @@ db.delete("books", 2);
 console.log(db.getAll());
 db.restore();
 console.log(db.getAll());
+
+setTimeout(() => {
+    console.log(db.getTableData("books"));
+}, 4000);
